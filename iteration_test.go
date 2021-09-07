@@ -11,6 +11,14 @@ func BenchmarkRepeat(b *testing.B) {
 	}
 }
 
+func ExampleRepeat() {
+	fmt.Println(Repeat("c", 3))
+	fmt.Println(Repeat("ab", 5))
+	// Output: 
+  // ccc
+  // ababababab
+}
+
 func TestRepeat(t *testing.T) {
 	t.Run("- Repeats the provided symbol n times", func(t *testing.T) {
 		result := Repeat("a", 5)
