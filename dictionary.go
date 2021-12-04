@@ -7,8 +7,9 @@ func (e DictionaryErr) Error() string {
 }
 
 var (
-	ErrNotFound   = DictionaryErr("Key not found in dictionary")
-	ErrWordExists = DictionaryErr("Word already exists")
+	ErrNotFound         = DictionaryErr("key not found in dictionary")
+	ErrWordExists       = DictionaryErr("cannot add word because it already exists")
+	ErrWordDoesNotExist = DictionaryErr("cannot update word because it does not exist")
 )
 
 type Dictionary map[string]string
@@ -40,7 +41,14 @@ func (d Dictionary) Add(word, definition string) error {
 func (d Dictionary) Update(word, definition string) error {
 	_, err := d.Lookup(word)
 
-	d[word] = definition
+	switch err {
+	case ErrNotFound:
+		return ErrWordDoesNotExist
+	case nil:
+		d[word] = definition
+	default:
+		return err
+	}
 
-	return err
+	return nil
 }
