@@ -5,15 +5,18 @@ import (
 )
 
 func TestLookup(t *testing.T) {
-	t.Run("When the key is in the dictionary", func(t *testing.T) {
-		dictionary := Dictionary{"test": "this is a test"}
+	word := "book"
+	definition := "a bound collection of pages meant for reading"
 
-		assertDefinition(t, dictionary, "test", "this is a test")
+	t.Run("When the key is in the dictionary", func(t *testing.T) {
+		dictionary := Dictionary{word: definition}
+
+		assertDefinition(t, dictionary, word, definition)
 	})
 
 	t.Run("When the key is not in the dictionary", func(t *testing.T) {
 		t.Run("Returns an error", func(t *testing.T) {
-			dictionary := Dictionary{"test": "this is a test"}
+			dictionary := Dictionary{word: definition}
 
 			_, err := dictionary.Lookup("hello")
 
@@ -23,35 +26,29 @@ func TestLookup(t *testing.T) {
 }
 
 func TestAdd(t *testing.T) {
+	word := "book"
+	definition := "a bound collection of pages meant for reading"
+
 	t.Run("Adds the provided word and definition to the dictionary", func(t *testing.T) {
 		dictionary := Dictionary{}
-		err := dictionary.Add("book", "a bound collection of pages meant for reading")
+		err := dictionary.Add(word, definition)
 
 		assertError(t, err, nil)
 
-		got, _ := dictionary.Lookup("book")
-		want := "a bound collection of pages meant for reading"
-
-		assertEqualStrings(t, got, want)
+		assertDefinition(t, dictionary, word, definition)
 	})
 
-	t.Run("Returns a useful error when word already exists", func(t *testing.T) {
-		word := "book"
-		definition := "a bound collection of pages meant for reading"
-		dictionary := Dictionary{word: definition}
+	t.Run("When the word is already in the dictionary", func(t *testing.T) {
+		t.Run("Returns a useful error when word already exists", func(t *testing.T) {
+			word := "book"
+			definition := "a bound collection of pages meant for reading"
+			dictionary := Dictionary{word: definition}
 
-		err := dictionary.Add(word, "another definition")
+			err := dictionary.Add(word, "another definition")
 
-		assertError(t, err, ErrWordExists)
+			assertError(t, err, ErrWordExists)
+		})
 	})
-}
-
-func assertEqualStrings(t testing.TB, got, want string) {
-	t.Helper()
-
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
 }
 
 func assertDefinition(t testing.TB, dictionary Dictionary, word, definition string) {
