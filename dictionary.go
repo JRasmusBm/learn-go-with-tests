@@ -37,6 +37,10 @@ func (d Dictionary) Add(word, definition string) error {
 	return nil
 }
 
-func (d Dictionary) Update(word, definition string) {
+func (d Dictionary) Update(word, definition string) error {
+	_, err := d.Lookup(word)
+
 	d[word] = definition
+
+	return err
 }

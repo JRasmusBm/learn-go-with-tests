@@ -59,13 +59,27 @@ func TestUpdate(t *testing.T) {
 	word := "book"
 	definition := "a bound collection of pages meant for reading"
 
-	t.Run("Sets a new definition for the word", func(t *testing.T) {
-		dictionary := Dictionary{word: definition}
-		newDefinition := "an item that rests in bookshelves"
+	t.Run("When the word is in the dictionary", func(t *testing.T) {
+		t.Run("Sets a new definition for the word", func(t *testing.T) {
+			dictionary := Dictionary{word: definition}
+			newDefinition := "an item that rests in bookshelves"
 
-		dictionary.Update(word, newDefinition)
+			err := dictionary.Update(word, newDefinition)
 
-		assertDefinition(t, dictionary, word, newDefinition)
+			assertError(t, err, nil)
+			assertDefinition(t, dictionary, word, newDefinition)
+		})
+	})
+
+	t.Run("When the word is not in the dictionary", func(t *testing.T) {
+		t.Run("Returns a useful error", func(t *testing.T) {
+			dictionary := Dictionary{}
+			newDefinition := "an item that rests in bookshelves"
+
+			err := dictionary.Update(word, newDefinition)
+
+			assertError(t, err, ErrNotFound)
+		})
 	})
 }
 
