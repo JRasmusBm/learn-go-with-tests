@@ -83,6 +83,33 @@ func TestUpdate(t *testing.T) {
 	})
 }
 
+func TestDelete(t *testing.T) {
+	word := "book"
+	definition := "a bound collection of pages meant for reading"
+
+	t.Run("When the word is in the dictionary", func(t *testing.T) {
+		t.Run("Deletes the word from the dictionary", func(t *testing.T) {
+			dictionary := Dictionary{word: definition}
+
+			dictionary.Delete(word)
+
+			_, err := dictionary.Lookup(word)
+
+			if err != ErrNotFound {
+				t.Errorf("Expected %v to be deleted", word)
+			}
+		})
+	})
+
+	t.Run("When the word is not in the dictionary", func(t *testing.T) {
+		t.Run("Silently does nothing", func(t *testing.T) {
+			dictionary := Dictionary{}
+
+			dictionary.Delete(word) // Does not panic!
+		})
+	})
+}
+
 func assertDefinition(t testing.TB, dictionary Dictionary, word, definition string) {
 	t.Helper()
 
