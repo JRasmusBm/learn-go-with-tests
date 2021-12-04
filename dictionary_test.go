@@ -25,12 +25,24 @@ func TestLookup(t *testing.T) {
 func TestAdd(t *testing.T) {
 	t.Run("Adds the provided word and definition to the dictionary", func(t *testing.T) {
 		dictionary := Dictionary{}
-		dictionary.Add("book", "a bound collection of pages meant for reading")
+		err := dictionary.Add("book", "a bound collection of pages meant for reading")
+
+		assertError(t, err, nil)
 
 		got, _ := dictionary.Lookup("book")
 		want := "a bound collection of pages meant for reading"
 
 		assertEqualStrings(t, got, want)
+	})
+
+	t.Run("Returns a useful error when word already exists", func(t *testing.T) {
+		word := "book"
+		definition := "a bound collection of pages meant for reading"
+		dictionary := Dictionary{word: definition}
+
+		err := dictionary.Add(word, "another definition")
+
+		assertError(t, err, ErrWordExists)
 	})
 }
 
