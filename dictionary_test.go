@@ -9,9 +9,11 @@ func TestLookup(t *testing.T) {
 	definition := "a bound collection of pages meant for reading"
 
 	t.Run("When the key is in the dictionary", func(t *testing.T) {
-		dictionary := Dictionary{word: definition}
+		t.Run("Returns its definition", func(t *testing.T) {
+			dictionary := Dictionary{word: definition}
 
-		assertDefinition(t, dictionary, word, definition)
+			assertDefinition(t, dictionary, word, definition)
+		})
 	})
 
 	t.Run("When the key is not in the dictionary", func(t *testing.T) {
@@ -29,17 +31,19 @@ func TestAdd(t *testing.T) {
 	word := "book"
 	definition := "a bound collection of pages meant for reading"
 
-	t.Run("Adds the provided word and definition to the dictionary", func(t *testing.T) {
-		dictionary := Dictionary{}
-		err := dictionary.Add(word, definition)
+	t.Run("When the word is not in the dictionary", func(t *testing.T) {
+		t.Run("Adds the word and its definition to the dictionary", func(t *testing.T) {
+			dictionary := Dictionary{}
+			err := dictionary.Add(word, definition)
 
-		assertError(t, err, nil)
+			assertError(t, err, nil)
 
-		assertDefinition(t, dictionary, word, definition)
+			assertDefinition(t, dictionary, word, definition)
+		})
 	})
 
 	t.Run("When the word is already in the dictionary", func(t *testing.T) {
-		t.Run("Returns a useful error when word already exists", func(t *testing.T) {
+		t.Run("Returns an error", func(t *testing.T) {
 			word := "book"
 			definition := "a bound collection of pages meant for reading"
 			dictionary := Dictionary{word: definition}
