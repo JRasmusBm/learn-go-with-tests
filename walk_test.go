@@ -74,14 +74,6 @@ func TestWalk(t *testing.T) {
 			},
 			ExpectedCalls: []string{"Storgatan", "Lillgatan"},
 		},
-		{
-			Name: "Maps",
-			Input: map[string]Address{
-				"Peter": {"Storgatan", 33},
-				"John":  {"Lillgatan", 11},
-			},
-			ExpectedCalls: []string{"Storgatan", "Lillgatan"},
-		},
 	}
 
 	for _, testCase := range cases {
@@ -97,4 +89,20 @@ func TestWalk(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("Maps", func(t *testing.T) {
+		var got []string
+		expectedCalls := []string{"Storgatan", "Lillgatan"}
+
+		walk(map[string]Address{
+			"Peter": {"Storgatan", 33},
+			"John":  {"Lillgatan", 11},
+		}, func(input string) {
+			got = append(got, input)
+		})
+
+		if !reflect.DeepEqual(got, expectedCalls) {
+			t.Errorf("Wrong calls, got %v want %v", got, expectedCalls)
+		}
+	})
 }
