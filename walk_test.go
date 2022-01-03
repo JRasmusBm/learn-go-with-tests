@@ -136,4 +136,21 @@ func TestWalk(t *testing.T) {
 			t.Errorf("got %v want %v", got, want)
 		}
 	})
+
+	t.Run("Functions", func(t *testing.T) {
+		aFunction := func() (Address, Address) {
+			return Address{"Storgatan", 33}, Address{"Lillgatan", 11}
+		}
+
+		var got []string
+		want := []string{"Storgatan", "Lillgatan"}
+
+		walk(aFunction, func(input string) {
+			got = append(got, input)
+		})
+
+		if !reflect.DeepEqual(got, want) {
+			t.Errorf("got %v want %v", got, want)
+		}
+	})
 }
