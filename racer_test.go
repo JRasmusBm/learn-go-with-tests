@@ -22,13 +22,9 @@ func TestRacer(t *testing.T) {
 	defer slowServer.Close()
 	defer fastServer.Close()
 
-	slowUrl := slowServer.URL
-	fastUrl := fastServer.URL
-
 	t.Run("Returns the faster url", func(t *testing.T) {
-
-		got := Racer(slowUrl, fastUrl)
-		want := fastUrl
+		got := Racer(slowServer.URL, fastServer.URL)
+		want := fastServer.URL
 
 		if got != want {
 			t.Errorf("got %v want %v", got, want)
@@ -36,11 +32,8 @@ func TestRacer(t *testing.T) {
 	})
 
 	t.Run("Input order does not matter", func(t *testing.T) {
-		slowUrl := "http://www.facebook.com"
-		fastUrl := "http://www.quii.co.uk"
-
-		got := Racer(fastUrl, slowUrl)
-		want := fastUrl
+		got := Racer(fastServer.URL, slowServer.URL)
+		want := fastServer.URL
 
 		if got != want {
 			t.Errorf("got %v want %v", got, want)
