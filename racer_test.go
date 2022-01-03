@@ -30,7 +30,7 @@ func TestRacer(t *testing.T) {
 	defer fastServer.Close()
 
 	t.Run("Returns the faster url", func(t *testing.T) {
-		got, err := Racer(slowServer.URL, fastServer.URL, 1*time.Second)
+		got, err := Racer(slowServer.URL, fastServer.URL)
 		want := fastServer.URL
 
 		AssertNoError(t, err)
@@ -42,7 +42,7 @@ func TestRacer(t *testing.T) {
 	})
 
 	t.Run("Input order does not matter", func(t *testing.T) {
-		got, err := Racer(fastServer.URL, slowServer.URL, 1*time.Second)
+		got, err := Racer(fastServer.URL, slowServer.URL)
 		want := fastServer.URL
 
 		AssertNoError(t, err)
@@ -57,7 +57,7 @@ func TestRacer(t *testing.T) {
 
 		defer verySlowServer.Close()
 
-		_, err := Racer(verySlowServer.URL, verySlowServer.URL, 0*time.Second)
+		_, err := ConfigurableRacer(verySlowServer.URL, verySlowServer.URL, 0*time.Second)
 
 		if err == nil {
 			t.Error("Expected error but didn't get one")
