@@ -15,6 +15,18 @@ type Address struct {
 	Number int
 }
 
+func assertContains(t testing.TB, haystack []string, needle string) {
+	t.Helper()
+
+	for _, x := range haystack {
+		if x == needle {
+			return
+		}
+	}
+
+	t.Errorf("Expected %v to contain %q but it didn't", haystack, needle)
+}
+
 func TestWalk(t *testing.T) {
 	cases := []struct {
 		Name          string
@@ -92,7 +104,6 @@ func TestWalk(t *testing.T) {
 
 	t.Run("Maps", func(t *testing.T) {
 		var got []string
-		expectedCalls := []string{"Storgatan", "Lillgatan"}
 
 		walk(map[string]Address{
 			"Peter": {"Storgatan", 33},
@@ -101,8 +112,7 @@ func TestWalk(t *testing.T) {
 			got = append(got, input)
 		})
 
-		if !reflect.DeepEqual(got, expectedCalls) {
-			t.Errorf("Wrong calls, got %v want %v", got, expectedCalls)
-		}
+		assertContains(t, got, "Storgatan")
+		assertContains(t, got, "Lillgatan")
 	})
 }
