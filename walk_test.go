@@ -27,6 +27,19 @@ func assertContains(t testing.TB, haystack []string, needle string) {
 	t.Errorf("Expected %v to contain %q but it didn't", haystack, needle)
 }
 
+func setupChannel(addresses []Address) chan Address {
+	result := make(chan Address)
+
+	go func() {
+		for _, address := range addresses {
+			result <- address
+		}
+		close(result)
+	}()
+
+	return result
+}
+
 func TestWalk(t *testing.T) {
 	cases := []struct {
 		Name          string
@@ -86,6 +99,29 @@ func TestWalk(t *testing.T) {
 			},
 			ExpectedCalls: []string{"Storgatan", "Lillgatan"},
 		},
+		{
+			Name: "Arrays",
+			Input: [2]Address{
+				{"Storgatan", 33},
+				{"Lillgatan", 11},
+			},
+			ExpectedCalls: []string{"Storgatan", "Lillgatan"},
+		},
+		{
+			Name: "Channels",
+			Input: setupChannel([]Address{
+				{"Storgatan", 33},
+				{"Lillgatan", 11},
+			}),
+			ExpectedCalls: []string{"Storgatan", "Lillgatan"},
+		},
+		{
+			Name: "Functions",
+			Input: func() (Address, Address) {
+				return Address{"Storgatan", 33}, Address{"Lillgatan", 11}
+			},
+			ExpectedCalls: []string{"Storgatan", "Lillgatan"},
+		},
 	}
 
 	for _, testCase := range cases {
@@ -114,43 +150,5 @@ func TestWalk(t *testing.T) {
 
 		assertContains(t, got, "Storgatan")
 		assertContains(t, got, "Lillgatan")
-	})
-
-	t.Run("Channels", func(t *testing.T) {
-		aChannel := make(chan Address)
-
-		go func() {
-			aChannel <- Address{"Storgatan", 33}
-			aChannel <- Address{"Lillgatan", 11}
-			close(aChannel)
-		}()
-
-		var got []string
-		want := []string{"Storgatan", "Lillgatan"}
-
-		walk(aChannel, func(input string) {
-			got = append(got, input)
-		})
-
-		if !reflect.DeepEqual(got, want) {
-			t.Errorf("got %v want %v", got, want)
-		}
-	})
-
-	t.Run("Functions", func(t *testing.T) {
-		aFunction := func() (Address, Address) {
-			return Address{"Storgatan", 33}, Address{"Lillgatan", 11}
-		}
-
-		var got []string
-		want := []string{"Storgatan", "Lillgatan"}
-
-		walk(aFunction, func(input string) {
-			got = append(got, input)
-		})
-
-		if !reflect.DeepEqual(got, want) {
-			t.Errorf("got %v want %v", got, want)
-		}
 	})
 }
