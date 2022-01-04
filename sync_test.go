@@ -1,10 +1,11 @@
 package sync
 
 import (
+	"sync"
 	"testing"
 )
 
-func assertCounterValue(t testing.TB, counter Counter, want int) {
+func assertCounterValue(t testing.TB, counter *Counter, want int) {
 	t.Helper()
 
 	got := counter.Value()
@@ -14,18 +15,33 @@ func assertCounterValue(t testing.TB, counter Counter, want int) {
 	}
 }
 
-func incrementCounter(counter *Counter, times int) {
-	for i := 0; i < times; i++ {
-		counter.Inc()
-	}
-}
-
 func TestSync(t *testing.T) {
 	t.Run("Incrementing the counter 3 times leaves it at 3", func(t *testing.T) {
 		counter := Counter{}
+		want := 3
 
-		incrementCounter(&counter, 3)
+		for i := 0; i < want; i++ {
+			counter.Inc()
+		}
 
-		assertCounterValue(t, counter, 3)
+		assertCounterValue(t, &counter, want)
+	})
+
+	t.Run("Runs safely concurrently", func(t *testing.T) {
+		counter := Counter{}
+		want := 1000
+
+		var wg sync.WaitGroup
+		wg.Add(want)
+
+		for i := 0; i < want; i++ {
+			go func() {
+				counter.Inc()
+				wg.Done()
+			}()
+		}
+		wg.Wait()
+
+		assertCounterValue(t, &counter, want)
 	})
 }
