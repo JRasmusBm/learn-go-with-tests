@@ -12,9 +12,11 @@ import (
 type SpyStore struct {
 	response  string
 	cancelled bool
+	t         *testing.T
 }
 
 func (s *SpyStore) Fetch() string {
+	time.Sleep(100 * time.Millisecond)
 	return s.response
 }
 
@@ -22,26 +24,47 @@ func (s *SpyStore) Cancel() {
 	s.cancelled = true
 }
 
-func TestServer(t *testing.T) {
-	t.Run("Returns the response", func(t *testing.T) {
-		want := "hello world"
+func (s *SpyStore) assertWasCancelled() {
+	s.t.Helper()
+	if !s.cancelled {
+		s.t.Error("Store was not told to cancel")
+	}
+}
 
-		server := Server(&SpyStore{response: want, cancelled: false})
+func (s *SpyStore) assertWasNotCancelled() {
+	s.t.Helper()
+	if s.cancelled {
+		s.t.Error("Store was told to cancel")
+	}
+}
+
+func TestServer(t *testing.T) {
+	t.Run("When the request is successful", func(t *testing.T) {
+		data := "hello world"
+		store := &SpyStore{response: data, cancelled: false, t: t}
+		server := Server(store)
 
 		request := httptest.NewRequest(http.MethodGet, "/", nil)
 		response := httptest.NewRecorder()
 
 		server.ServeHTTP(response, request)
 
-		got := response.Body.String()
+		t.Run("Returns the data", func(t *testing.T) {
+			got := response.Body.String()
+			want := data
 
-		if got != want {
-			t.Errorf("got %v want %v", got, want)
-		}
+			if got != want {
+				t.Errorf("got %v want %v", got, want)
+			}
+		})
+
+		t.Run("Does not get cancelled", func(t *testing.T) {
+			store.assertWasNotCancelled()
+		})
 	})
 
-	t.Run("Tells the store to cancel work if request was cancelled", func(t *testing.T) {
-		store := &SpyStore{response: "hello world", cancelled: false}
+	t.Run("When the request is cancelled", func(t *testing.T) {
+		store := &SpyStore{response: "hello world", cancelled: false, t: t}
 		server := Server(store)
 
 		request := httptest.NewRequest(http.MethodGet, "/", nil)
@@ -54,8 +77,8 @@ func TestServer(t *testing.T) {
 
 		server.ServeHTTP(response, request)
 
-		if !store.cancelled {
-			t.Error("Store was not told to cancel")
-		}
+		t.Run("Tells the store to cancel", func(t *testing.T) {
+			store.assertWasCancelled()
+		})
 	})
 }
