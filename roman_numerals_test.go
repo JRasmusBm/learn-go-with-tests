@@ -13,4 +13,13 @@ func TestRomanNumerals(t *testing.T) {
 			t.Errorf("got %v want %v", got, want)
 		}
 	})
+
+	t.Run("Converts 2 to II", func(t *testing.T) {
+		got := ConvertToRoman(2)
+		want := "II"
+
+		if got != want {
+			t.Errorf("got %v want %v", got, want)
+		}
+	})
 }
