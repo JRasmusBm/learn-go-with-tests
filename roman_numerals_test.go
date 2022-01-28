@@ -16,6 +16,7 @@ func TestRomanNumerals(t *testing.T) {
 			{arabic: 3, want: "III"},
 			{arabic: 4, want: "IV"},
 			{arabic: 5, want: "V"},
+			{arabic: 9, want: "IX"},
 		}
 
 		for _, testEntry := range testTable {
