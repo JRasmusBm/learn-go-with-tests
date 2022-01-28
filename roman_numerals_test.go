@@ -1,25 +1,25 @@
 package roman_numerals
 
 import (
+	"reflect"
 	"testing"
 )
 
 func TestRomanNumerals(t *testing.T) {
-	t.Run("Converts 1 to I", func(t *testing.T) {
-		got := ConvertToRoman(1)
-		want := "I"
-
-		if got != want {
-			t.Errorf("got %v want %v", got, want)
+	t.Run("Table Test", func(t *testing.T) {
+		testTable := []struct {
+			arabic int
+			want   string
+		}{
+			{arabic: 1, want: "I"},
+			{arabic: 2, want: "II"},
 		}
-	})
 
-	t.Run("Converts 2 to II", func(t *testing.T) {
-		got := ConvertToRoman(2)
-		want := "II"
-
-		if got != want {
-			t.Errorf("got %v want %v", got, want)
+		for _, testEntry := range testTable {
+			got := ConvertToRoman(testEntry.arabic)
+			if !reflect.DeepEqual(got, testEntry.want) {
+				t.Errorf("%#v, got %v want %v", testEntry.arabic, got, testEntry.want)
+			}
 		}
 	})
 }
