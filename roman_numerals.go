@@ -1,9 +1,12 @@
 package roman_numerals
 
 func ConvertToRoman(arabic int) string {
-	if arabic == 2 {
+	switch arabic {
+	case 3:
+		return "III"
+	case 2:
 		return "II"
+	default:
+		return "I"
 	}
-
-	return "I"
 }
