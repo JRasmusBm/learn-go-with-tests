@@ -1,13 +1,27 @@
 package roman_numerals
 
-import "strings"
+import (
+	"strings"
+)
 
 type RomanNumeral struct {
 	Value  int
 	Symbol string
 }
 
-var allRomanNumerals = []RomanNumeral{
+type RomanNumerals []RomanNumeral
+
+func (r RomanNumerals) ValueOf(symbol string) int {
+	for _, roman_numeral := range r {
+		if roman_numeral.Symbol == symbol {
+			return roman_numeral.Value
+		}
+	}
+
+	return 0
+}
+
+var allRomanNumerals = RomanNumerals{
 	{1000, "M"},
 	{900, "CM"},
 	{500, "D"},
@@ -36,9 +50,24 @@ func ConvertToRoman(arabic int) string {
 	return result.String()
 }
 
-func ConvertToArabic(roman string) (total int) {
-	for range roman {
-		total += 1
+func ConvertToArabic(roman string) (result int) {
+	for i := 0; i < len(roman); i++ {
+		currentSymbol := roman[i]
+		nextSymbol := byte(' ') // Not a roman numeral
+
+		if i+1 < len(roman) {
+			nextSymbol = roman[i+1]
+		}
+
+		valueWithNextSymbol := allRomanNumerals.ValueOf(string([]byte{currentSymbol, nextSymbol}))
+		valueOfCurrentSymbol := allRomanNumerals.ValueOf(string([]byte{currentSymbol}))
+
+		if valueWithNextSymbol != 0 {
+			result += valueWithNextSymbol
+			i++
+		} else {
+			result += valueOfCurrentSymbol
+		}
 	}
 
 	return

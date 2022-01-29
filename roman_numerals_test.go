@@ -48,7 +48,7 @@ func TestRomanNumerals(t *testing.T) {
 	})
 
 	t.Run("Roman to arabic", func(t *testing.T) {
-		for _, testEntry := range testTable[:3] {
+		for _, testEntry := range testTable {
 			got := ConvertToArabic(testEntry.roman)
 			if !reflect.DeepEqual(got, testEntry.arabic) {
 				t.Errorf("%#v, got %v want %v", testEntry.roman, got, testEntry.arabic)
