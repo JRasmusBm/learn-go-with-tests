@@ -11,7 +11,9 @@ type RomanNumeral struct {
 
 type RomanNumerals []RomanNumeral
 
-func (r RomanNumerals) ValueOf(symbol string) int {
+func (r RomanNumerals) ValueOf(symbols ...byte) int {
+	symbol := string(symbols)
+
 	for _, roman_numeral := range r {
 		if roman_numeral.Symbol == symbol {
 			return roman_numeral.Value
@@ -53,20 +55,19 @@ func ConvertToRoman(arabic int) string {
 func ConvertToArabic(roman string) (result int) {
 	for i := 0; i < len(roman); i++ {
 		currentSymbol := roman[i]
-		nextSymbol := byte(' ') // Not a roman numeral
+		valueWithNextSymbol := 0
 
 		if i+1 < len(roman) {
-			nextSymbol = roman[i+1]
+			valueWithNextSymbol = allRomanNumerals.ValueOf(currentSymbol, roman[i+1])
 		}
 
-		valueWithNextSymbol := allRomanNumerals.ValueOf(string([]byte{currentSymbol, nextSymbol}))
-		valueOfCurrentSymbol := allRomanNumerals.ValueOf(string([]byte{currentSymbol}))
+		valueOfCurrentSymbol := allRomanNumerals.ValueOf(currentSymbol)
 
-		if valueWithNextSymbol != 0 {
+		if valueWithNextSymbol == 0 {
+			result += valueOfCurrentSymbol
+		} else {
 			result += valueWithNextSymbol
 			i++
-		} else {
-			result += valueOfCurrentSymbol
 		}
 	}
 
