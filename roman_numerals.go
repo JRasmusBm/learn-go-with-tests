@@ -5,16 +5,16 @@ import (
 )
 
 type RomanNumeral struct {
-	Value  int
+	Value  uint16
 	Symbol string
 }
 
 type RomanNumerals []RomanNumeral
 
-func (r RomanNumerals) ValueOf(symbols ...byte) int {
+func (roman_numerals RomanNumerals) ValueOf(symbols ...byte) uint16 {
 	symbol := string(symbols)
 
-	for _, roman_numeral := range r {
+	for _, roman_numeral := range roman_numerals {
 		if roman_numeral.Symbol == symbol {
 			return roman_numeral.Value
 		}
@@ -39,7 +39,7 @@ var allRomanNumerals = RomanNumerals{
 	{1, "I"},
 }
 
-func ConvertToRoman(arabic int) string {
+func ConvertToRoman(arabic uint16) string {
 	var result strings.Builder
 
 	for _, numeral := range allRomanNumerals {
@@ -52,10 +52,10 @@ func ConvertToRoman(arabic int) string {
 	return result.String()
 }
 
-func ConvertToArabic(roman string) (result int) {
+func ConvertToArabic(roman string) (result uint16) {
 	for i := 0; i < len(roman); i++ {
 		currentSymbol := roman[i]
-		valueWithNextSymbol := 0
+		var valueWithNextSymbol uint16 = 0
 
 		if i+1 < len(roman) {
 			valueWithNextSymbol = allRomanNumerals.ValueOf(currentSymbol, roman[i+1])

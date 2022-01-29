@@ -3,11 +3,12 @@ package roman_numerals
 import (
 	"reflect"
 	"testing"
+	"testing/quick"
 )
 
 func TestRomanNumerals(t *testing.T) {
 	testTable := []struct {
-		arabic int
+		arabic uint16
 		roman  string
 	}{
 		{arabic: 1, roman: "I"},
@@ -53,6 +54,19 @@ func TestRomanNumerals(t *testing.T) {
 			if !reflect.DeepEqual(got, testEntry.arabic) {
 				t.Errorf("%#v, got %v want %v", testEntry.roman, got, testEntry.arabic)
 			}
+		}
+	})
+
+	t.Run("Property test: Conversion is reversible", func(t *testing.T) {
+		isReversible := func(arabic uint16) bool {
+			roman := ConvertToRoman(arabic)
+			newArabic := ConvertToArabic(roman)
+			t.Logf("Got %v (%v), want %v", newArabic, roman, arabic)
+			return newArabic == arabic
+		}
+
+		if err := quick.Check(isReversible, &quick.Config{MaxCount: 1000}); err != nil {
+			t.Error("Failed checks: ", err)
 		}
 	})
 }
