@@ -16,3 +16,5 @@ func SecondHand(tm time.Time) Point {
 
 	return Point{X: 150, Y: origin - 90}
 }
+
+
