@@ -51,6 +51,7 @@ func TestSecondHandVector(t *testing.T) {
 		}
 
 		cases := []testCase{
+			{ct: clockTime{h: 0, m: 0, s: 0}, want: Point{0, 1}},
 			{ct: clockTime{h: 0, m: 0, s: 30}, want: Point{0, -1}},
 		}
 
