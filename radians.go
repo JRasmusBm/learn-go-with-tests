@@ -10,9 +10,7 @@ func secondsInRadians(t time.Time) float64 {
 }
 
 func secondHandPoint(t time.Time) Point {
-	if t.Second() > 0 {
-		return Point{0, -1}
-	}
+	angle := secondsInRadians(t)
 
-	return Point{0, 1}
+	return Point{math.Sin(angle), math.Cos(angle)}
 }

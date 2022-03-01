@@ -52,15 +52,17 @@ func TestSecondHandVector(t *testing.T) {
 
 		cases := []testCase{
 			{ct: clockTime{h: 0, m: 0, s: 0}, want: Point{0, 1}},
+			{ct: clockTime{h: 0, m: 0, s: 15}, want: Point{1, 0}},
 			{ct: clockTime{h: 0, m: 0, s: 30}, want: Point{0, -1}},
+			{ct: clockTime{h: 0, m: 0, s: 45}, want: Point{-1, -1}},
 		}
 
 		for _, c := range cases {
 			t.Run(c.ct.String(), func(t *testing.T) {
 				got := secondHandPoint(c.ct.toTime())
 
-				if !reflect.DeepEqual(got, c.want) {
-					t.Errorf("%#v, got %v want %v", got, c.ct, c.want)
+				if !got.Equals(c.want) {
+					t.Errorf("%#v, got %v want %v", c.ct, got, c.want)
 				}
 			})
 		}
