@@ -3,12 +3,12 @@ package clockface
 import "time"
 
 type Point struct {
-	X float32
-	Y float32
+	X float64
+	Y float64
 }
 
 func SecondHand(tm time.Time) Point {
-	var origin float32 = 150.0
+	var origin float64 = 150.0
 
 	if tm.Second() > 0 {
 		return Point{X: 150, Y: origin + 90}
@@ -16,5 +16,3 @@ func SecondHand(tm time.Time) Point {
 
 	return Point{X: 150, Y: origin - 90}
 }
-
-
