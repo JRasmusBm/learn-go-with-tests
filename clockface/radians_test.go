@@ -54,7 +54,7 @@ func TestSecondHandVector(t *testing.T) {
 			{ct: clockTime{h: 0, m: 0, s: 0}, want: Point{0, 1}},
 			{ct: clockTime{h: 0, m: 0, s: 15}, want: Point{1, 0}},
 			{ct: clockTime{h: 0, m: 0, s: 30}, want: Point{0, -1}},
-			{ct: clockTime{h: 0, m: 0, s: 45}, want: Point{-1, -1}},
+			{ct: clockTime{h: 0, m: 0, s: 45}, want: Point{-1, 0}},
 		}
 
 		for _, c := range cases {
