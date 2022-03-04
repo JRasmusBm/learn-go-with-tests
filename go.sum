@@ -1,3 +1,5 @@
+github.com/JRasmusBm/learn-go-with-tests/clockface v0.0.0-20220304204538-411315751c0a h1:0qXGQec2eYRD+r9oAHObg9YVgLz8NKULed859RajXVo=
+github.com/JRasmusBm/learn-go-with-tests/clockface v0.0.0-20220304204538-411315751c0a/go.mod h1:zJRr09q+nE7OsGw3wkQOL520xYuHhiYctAQnSaatRV4=
 github.com/kisielk/errcheck v1.6.0 h1:YTDO4pNy7AUN/021p+JGHycQyYNIyMoenM1YDVK6RlY=
 github.com/kisielk/errcheck v1.6.0/go.mod h1:pFxgyoBC7bSaBwPgfKdkLd5X25qrDl4LWUI2bnpBCr8=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
