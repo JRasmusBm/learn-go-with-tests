@@ -1,8 +1,10 @@
-package clockface
+package clockface_test
 
 import (
 	"testing"
 	"time"
+
+	"github.com/JRasmusBm/learn-go-with-tests/clockface"
 )
 
 func TestSecondHand(t *testing.T) {
@@ -10,10 +12,10 @@ func TestSecondHand(t *testing.T) {
 	scale := 90.0
 
 	t.Run("Points up at 0 seconds", func(t *testing.T) {
-		clock := New(origin, scale)
+		clock := clockface.New(origin, scale)
 		tm := time.Date(1337, time.January, 1, 0, 0, 0, 0, time.UTC)
 
-		want := Point{X: 150, Y: 150 - 90}
+		want := clockface.Point{X: 150, Y: 150 - 90}
 		got := clock.SecondHand(tm)
 
 		if got != want {
@@ -22,10 +24,10 @@ func TestSecondHand(t *testing.T) {
 	})
 
 	t.Run("Points down at 30 seconds", func(t *testing.T) {
-		clock := New(origin, scale)
+		clock := clockface.New(origin, scale)
 		tm := time.Date(1337, time.January, 1, 0, 0, 30, 0, time.UTC)
 
-		want := Point{X: 150, Y: 150 + 90}
+		want := clockface.Point{X: 150, Y: 150 + 90}
 		got := clock.SecondHand(tm)
 
 		if got != want {
