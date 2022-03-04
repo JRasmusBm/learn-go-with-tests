@@ -26,5 +26,10 @@ func New(scale, origin float64) *Clockface {
 }
 
 func (c *Clockface) SecondHand(tm time.Time) Point {
-	return Point{X: c.origin, Y: c.origin}
+	p := secondHandPoint(tm)
+
+	return Point{
+		X: c.origin + p.X*c.scale,
+		Y: c.origin - p.Y*c.scale,
+	}
 }
