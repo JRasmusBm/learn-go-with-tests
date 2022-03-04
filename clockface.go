@@ -16,12 +16,15 @@ func (p Point) Equals(other Point) bool {
 	return math.Abs(p.X-other.X) < threshold && math.Abs(p.Y-other.Y) < threshold
 }
 
-func SecondHand(tm time.Time) Point {
-	var origin float64 = 150.0
+type Clockface struct {
+	scale  float64
+	origin float64
+}
 
-	if tm.Second() > 0 {
-		return Point{X: 150, Y: origin + 90}
-	}
+func New(scale, origin float64) *Clockface {
+	return &Clockface{scale: scale, origin: origin}
+}
 
-	return Point{X: 150, Y: origin - 90}
+func (c *Clockface) SecondHand(tm time.Time) Point {
+	return Point{X: c.origin, Y: c.origin}
 }
