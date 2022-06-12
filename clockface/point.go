@@ -8,7 +8,7 @@ type Point struct {
 }
 
 func (p Point) Equals(other Point) bool {
-	const threshold = 1e7
+	const threshold = 1e-7
 
 	return math.Abs(p.X-other.X) < threshold && math.Abs(p.Y-other.Y) < threshold
 }
