@@ -7,33 +7,31 @@ import (
 	"time"
 )
 
-// SVG was generated 2022-06-16 11:27:27 by jrasmusbm on frost-spider.
+type Circle struct {
+	Cx float64 `xml:"cx,attr"`
+	Cy float64 `xml:"cy,attr"`
+	R  float64 `xml:"r,attr"`
+}
+
+type Line struct {
+	X1 float64 `xml:"x1,attr"`
+	Y1 float64 `xml:"y1,attr"`
+	X2 float64 `xml:"x2,attr"`
+	Y2 float64 `xml:"y2,attr"`
+}
+
 type SVG struct {
 	XMLName xml.Name `xml:"svg"`
-	Text    string   `xml:",chardata"`
 	Xmlns   string   `xml:"xmlns,attr"`
 	Width   string   `xml:"width,attr"`
 	Height  string   `xml:"height,attr"`
 	ViewBox string   `xml:"viewBox,attr"`
 	Version string   `xml:"version,attr"`
-	Circle  struct {
-		Text  string `xml:",chardata"`
-		Cx    string `xml:"cx,attr"`
-		Cy    string `xml:"cy,attr"`
-		R     string `xml:"r,attr"`
-		Style string `xml:"style,attr"`
-	} `xml:"circle"`
-	Line []struct {
-		Text  string `xml:",chardata"`
-		X1    string `xml:"x1,attr"`
-		Y1    string `xml:"y1,attr"`
-		X2    string `xml:"x2,attr"`
-		Y2    string `xml:"y2,attr"`
-		Style string `xml:"style,attr"`
-	} `xml:"line"`
+	Circle  Circle   `xml:"circle"`
+	Line    []Line   `xml:"line"`
 }
 
-func (c *Clockface) WriteSvg(w io.Writer, t time.Time) {
+func (c *Clockface) WriteSVG(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
 	io.WriteString(w, bezel)
 	io.WriteString(w, secondHandTag(c.SecondHand(t)))

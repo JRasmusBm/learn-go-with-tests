@@ -9,7 +9,7 @@ import (
 	"github.com/JRasmusBm/learn-go-with-tests/pkg/clockface"
 )
 
-func TestSvgWriter(t *testing.T) {
+func TestSVGWriter(t *testing.T) {
 	origin := 150.0
 	scale := 90.0
 
@@ -17,20 +17,19 @@ func TestSvgWriter(t *testing.T) {
 		tm := time.Date(1337, time.January, 1, 0, 0, 0, 0, time.UTC)
 
 		b := bytes.Buffer{}
-		clockface.New(origin, scale).WriteSvg(&b, tm)
+		clockface.New(origin, scale).WriteSVG(&b, tm)
 
 		svg := clockface.SVG{}
 		xml.Unmarshal(b.Bytes(), &svg)
 
-		x2 := "150.000"
-		y2 := "60.000"
+		want := clockface.Line{150, 150, 150, 60}
 
 		for _, line := range svg.Line {
-			if line.X2 == x2 && line.Y2 == y2 {
+			if line == want {
 				return
 			}
 		}
 
-		t.Errorf("Expected to find the second hand with x2 of %+v and y2 of %+v, in the SVG output %v", x2, y2, b.String())
+		t.Errorf("Expected to find the second hand %+v, in the SVG output %v", want, b.String())
 	})
 }
