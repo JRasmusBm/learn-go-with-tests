@@ -28,7 +28,7 @@ type SVG struct {
 	ViewBox string   `xml:"viewBox,attr"`
 	Version string   `xml:"version,attr"`
 	Circle  Circle   `xml:"circle"`
-	Line    []Line   `xml:"line"`
+	Lines   []Line   `xml:"line"`
 }
 
 func (c *Clockface) WriteSVG(w io.Writer, t time.Time) {
