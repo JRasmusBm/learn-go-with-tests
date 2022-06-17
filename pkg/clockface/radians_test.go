@@ -53,5 +53,24 @@ func TestSecondHandVector(t *testing.T) {
 			})
 		}
 	})
+}
 
+func TestMinutesInRadians(t *testing.T) {
+	cases := []struct {
+		ct   timeutils.ClockTime
+		want float64
+	}{
+		{ct: timeutils.ClockTime{H: 0, M: 0, S: 0}, want: 0.0},
+		{ct: timeutils.ClockTime{H: 0, M: 30, S: 0}, want: math.Pi},
+		{ct: timeutils.ClockTime{H: 0, M: 45, S: 0}, want: (math.Pi / 2) * 3},
+		{ct: timeutils.ClockTime{H: 0, M: 7, S: 0}, want: (math.Pi / 30) * 7},
+	}
+	for _, c := range cases {
+		t.Run(c.ct.String(), func(t *testing.T) {
+			got := minutesInRadians(c.ct.ToTime())
+			if !reflect.DeepEqual(got, c.want) {
+				t.Errorf("%v, got %v want %v", c.ct, got, c.want)
+			}
+		})
+	}
 }
