@@ -38,11 +38,10 @@ func TestSVGWriterSecondHand(t *testing.T) {
 			xml.Unmarshal(b.Bytes(), &svg)
 
 			if !isIn(c.want, svg.Lines) {
-				t.Errorf("Expected to find the second hand %+v, in the SVG output %v", c.want, b.String())
+				t.Errorf("Expected to find the second hand line %+v, in the SVG lines %+v", c.want, svg.Lines)
 			}
 		})
 	}
-
 }
 
 func isIn[T comparable](l T, ls []T) bool {
