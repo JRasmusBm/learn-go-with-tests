@@ -61,9 +61,7 @@ func TestMinutesInRadians(t *testing.T) {
 		want float64
 	}{
 		{ct: timeutils.ClockTime{H: 0, M: 0, S: 0}, want: 0.0},
-		{ct: timeutils.ClockTime{H: 0, M: 30, S: 0}, want: math.Pi},
-		{ct: timeutils.ClockTime{H: 0, M: 45, S: 0}, want: (math.Pi / 2) * 3},
-		{ct: timeutils.ClockTime{H: 0, M: 7, S: 0}, want: (math.Pi / 30) * 7},
+		{ct: timeutils.ClockTime{H: 0, M: 0, S: 7}, want: 7 * (math.Pi / (30 * 60))},
 	}
 	for _, c := range cases {
 		t.Run(c.ct.String(), func(t *testing.T) {
