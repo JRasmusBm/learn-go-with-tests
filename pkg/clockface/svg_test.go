@@ -13,20 +13,36 @@ func TestSVGWriterSecondHand(t *testing.T) {
 	origin := 150.0
 	scale := 90.0
 
-	t.Run("- After midnight", func(t *testing.T) {
-		tm := timeutils.ClockTime{H: 0, M: 0, S: 0}.ToTime()
-		b := bytes.Buffer{}
-		clockface.New(origin, scale).WriteSVG(&b, tm)
+	type testCase struct {
+		ct   timeutils.ClockTime
+		want clockface.Line
+	}
+	cases := []testCase{
+		{
+			timeutils.ClockTime{H: 0, M: 0, S: 0},
+			clockface.Line{150, 150, 150, 60},
+		},
+		{
+			timeutils.ClockTime{H: 0, M: 0, S: 30},
+			clockface.Line{150, 150, 150, 240},
+		},
+	}
 
-		svg := clockface.SVG{}
-		xml.Unmarshal(b.Bytes(), &svg)
+	for _, c := range cases {
+		t.Run(c.ct.String(), func(t *testing.T) {
+			tm := c.ct.ToTime()
+			b := bytes.Buffer{}
+			clockface.New(origin, scale).WriteSVG(&b, tm)
 
-		want := clockface.Line{150, 150, 150, 60}
+			svg := clockface.SVG{}
+			xml.Unmarshal(b.Bytes(), &svg)
 
-		if !isIn(want, svg.Lines) {
-			t.Errorf("Expected to find the second hand %+v, in the SVG output %v", want, b.String())
-		}
-	})
+			if !isIn(c.want, svg.Lines) {
+				t.Errorf("Expected to find the second hand %+v, in the SVG output %v", c.want, b.String())
+			}
+		})
+	}
+
 }
 
 func isIn[T comparable](l T, ls []T) bool {
