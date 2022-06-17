@@ -4,18 +4,17 @@ import (
 	"bytes"
 	"encoding/xml"
 	"testing"
-	"time"
 
 	"github.com/JRasmusBm/learn-go-with-tests/pkg/clockface"
+	"github.com/JRasmusBm/learn-go-with-tests/pkg/timeutils"
 )
 
-func TestSVGWriter(t *testing.T) {
+func TestSVGWriterSecondHand(t *testing.T) {
 	origin := 150.0
 	scale := 90.0
 
 	t.Run("- After midnight", func(t *testing.T) {
-		tm := time.Date(1337, time.January, 1, 0, 0, 0, 0, time.UTC)
-
+		tm := timeutils.ClockTime{H: 0, M: 0, S: 0}.ToTime()
 		b := bytes.Buffer{}
 		clockface.New(origin, scale).WriteSVG(&b, tm)
 
@@ -24,14 +23,13 @@ func TestSVGWriter(t *testing.T) {
 
 		want := clockface.Line{150, 150, 150, 60}
 
-		if !isInLines(want, svg.Lines) {
+		if !isIn(want, svg.Lines) {
 			t.Errorf("Expected to find the second hand %+v, in the SVG output %v", want, b.String())
 		}
-
 	})
 }
 
-func isInLines(l clockface.Line, ls []clockface.Line) bool {
+func isIn[T comparable](l T, ls []T) bool {
 	for _, line := range ls {
 		if line == l {
 			return true
