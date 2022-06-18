@@ -23,3 +23,7 @@ func (c *Clockface) handPosition(p Point) Point {
 func (c *Clockface) SecondHand(tm time.Time) Point {
 	return c.handPosition(secondHandPoint(tm))
 }
+
+func (c *Clockface) MinuteHand(tm time.Time) Point {
+	return c.handPosition(minuteHandPoint(tm))
+}

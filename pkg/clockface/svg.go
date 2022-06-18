@@ -34,12 +34,13 @@ type SVG struct {
 func (c *Clockface) WriteSVG(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
 	io.WriteString(w, bezel)
-	io.WriteString(w, secondHandTag(c.SecondHand(t)))
+	io.WriteString(w, handTag(c.SecondHand(t), "#f00"))
+	io.WriteString(w, handTag(c.MinuteHand(t), "#000"))
 	io.WriteString(w, svgEnd)
 }
 
-func secondHandTag(p Point) string {
-	return fmt.Sprintf(`<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:#f00;stroke-width:3px;"/>`, p.X, p.Y)
+func handTag(p Point, color string) string {
+	return fmt.Sprintf(`<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:%s;stroke-width:3px;"/>`, p.X, p.Y, color)
 }
 
 const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
