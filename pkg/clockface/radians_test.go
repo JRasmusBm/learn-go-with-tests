@@ -45,7 +45,8 @@ func TestSecondHandVector(t *testing.T) {
 
 		for _, c := range cases {
 			t.Run(c.ct.String(), func(t *testing.T) {
-				got := secondHandPoint(c.ct.ToTime())
+				got := New(0, 1).SecondHand(c.ct.ToTime())
+				got.Y = -got.Y
 
 				if !got.Equals(c.want) {
 					t.Errorf("%#v, got %v want %v", c.ct, got, c.want)
@@ -90,7 +91,8 @@ func TestMinuteHandVector(t *testing.T) {
 
 		for _, c := range cases {
 			t.Run(c.ct.String(), func(t *testing.T) {
-				got := minuteHandPoint(c.ct.ToTime())
+				got := New(0, 1).MinuteHand(c.ct.ToTime())
+				got.Y = -got.Y
 
 				if !got.Equals(c.want) {
 					t.Errorf("%#v, got %v want %v", c.ct, got, c.want)

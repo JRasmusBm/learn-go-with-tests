@@ -1,6 +1,7 @@
 package clockface
 
 import (
+	"math"
 	"time"
 )
 
@@ -13,17 +14,17 @@ func New(origin, scale float64) *Clockface {
 	return &Clockface{scale: scale, origin: origin}
 }
 
-func (c *Clockface) handPosition(p Point) Point {
+func (c *Clockface) handPosition(angle float64) Point {
 	return Point{
-		X: c.origin + p.X*c.scale,
-		Y: c.origin - p.Y*c.scale,
+		X: c.origin + math.Sin(angle)*c.scale,
+		Y: c.origin - math.Cos(angle)*c.scale,
 	}
 }
 
 func (c *Clockface) SecondHand(tm time.Time) Point {
-	return c.handPosition(secondHandPoint(tm))
+	return c.handPosition(secondsInRadians(tm))
 }
 
 func (c *Clockface) MinuteHand(tm time.Time) Point {
-	return c.handPosition(minuteHandPoint(tm))
+	return c.handPosition(minutesInRadians(tm))
 }
