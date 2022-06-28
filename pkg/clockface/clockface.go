@@ -28,3 +28,7 @@ func (c *Clockface) SecondHand(tm time.Time) Point {
 func (c *Clockface) MinuteHand(tm time.Time) Point {
 	return c.handPosition(minutesInRadians(tm))
 }
+
+func (c *Clockface) HourHand(tm time.Time) Point {
+	return c.handPosition(hoursInRadians(tm))
+}

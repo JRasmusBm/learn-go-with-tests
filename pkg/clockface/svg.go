@@ -36,6 +36,7 @@ func (c *Clockface) WriteSVG(w io.Writer, t time.Time) {
 	io.WriteString(w, bezel)
 	io.WriteString(w, handTag(c.SecondHand(t), "#f00"))
 	io.WriteString(w, handTag(c.MinuteHand(t), "#000"))
+	io.WriteString(w, handTag(c.HourHand(t), "#000"))
 	io.WriteString(w, svgEnd)
 }
 
