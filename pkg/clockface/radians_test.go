@@ -2,7 +2,6 @@ package clockface
 
 import (
 	"math"
-	"reflect"
 	"testing"
 
 	"github.com/JRasmusBm/learn-go-with-tests/pkg/timeutils"
@@ -21,7 +20,7 @@ func TestSecondsInRadians(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.ct.String(), func(t *testing.T) {
 			got := secondsInRadians(c.ct.ToTime())
-			if !reflect.DeepEqual(got, c.want) {
+			if !roughlyEqual(got, c.want) {
 				t.Errorf("%v, got %v want %v", c.ct, got, c.want)
 			}
 		})
@@ -67,7 +66,7 @@ func TestMinutesInRadians(t *testing.T) {
 	for _, c := range cases {
 		t.Run(c.ct.String(), func(t *testing.T) {
 			got := minutesInRadians(c.ct.ToTime())
-			if !reflect.DeepEqual(got, c.want) {
+			if !roughlyEqual(got, c.want) {
 				t.Errorf("%v, got %v want %v", c.ct, got, c.want)
 			}
 		})
