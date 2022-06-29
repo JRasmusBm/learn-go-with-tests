@@ -109,11 +109,12 @@ func TestHoursInRadians(t *testing.T) {
 		{ct: timeutils.ClockTime{H: 0, M: 0, S: 0}, want: 0},
 		{ct: timeutils.ClockTime{H: 6, M: 0, S: 0}, want: math.Pi},
 		{ct: timeutils.ClockTime{H: 21, M: 0, S: 0}, want: math.Pi * 1.5},
+		{ct: timeutils.ClockTime{H: 0, M: 1, S: 30}, want: math.Pi / ((6 * 60 * 60) / 90)},
 	}
 	for _, c := range cases {
 		t.Run(c.ct.String(), func(t *testing.T) {
 			got := hoursInRadians(c.ct.ToTime())
-			if !reflect.DeepEqual(got, c.want) {
+			if !roughlyEqual(got, c.want) {
 				t.Errorf("%v, got %v want %v", c.ct, got, c.want)
 			}
 		})
