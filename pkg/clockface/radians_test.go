@@ -100,6 +100,7 @@ func TestMinuteHandVector(t *testing.T) {
 		}
 	})
 }
+
 func TestHoursInRadians(t *testing.T) {
 	cases := []struct {
 		ct   timeutils.ClockTime
@@ -118,4 +119,30 @@ func TestHoursInRadians(t *testing.T) {
 			}
 		})
 	}
+}
+
+func TestHourHandVector(t *testing.T) {
+	t.Run("ClockTimes", func(t *testing.T) {
+		type testCase struct {
+			name string
+			ct   timeutils.ClockTime
+			want Point
+		}
+
+		cases := []testCase{
+			{ct: timeutils.ClockTime{H: 6, M: 0, S: 0}, want: Point{0, -1}},
+			{ct: timeutils.ClockTime{H: 21, M: 0, S: 0}, want: Point{-1, 0}},
+		}
+
+		for _, c := range cases {
+			t.Run(c.ct.String(), func(t *testing.T) {
+				got := New(0, 1).HourHand(c.ct.ToTime())
+				got.Y = -got.Y
+
+				if !got.Equals(c.want) {
+					t.Errorf("%#v, got %v want %v", c.ct, got, c.want)
+				}
+			})
+		}
+	})
 }
