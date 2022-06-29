@@ -31,17 +31,27 @@ type SVG struct {
 	Lines   []Line   `xml:"line"`
 }
 
+func tee[T any](val T) T {
+	fmt.Printf("%v", val)
+
+	return val
+}
+
 func (c *Clockface) WriteSVG(w io.Writer, t time.Time) {
 	io.WriteString(w, svgStart)
-	io.WriteString(w, bezel)
-	io.WriteString(w, handTag(c.SecondHand(t), "#f00"))
-	io.WriteString(w, handTag(c.MinuteHand(t), "#000"))
-	io.WriteString(w, handTag(c.HourHand(t), "#000"))
+	io.WriteString(w, tee(c.bezel("#000")))
+	io.WriteString(w, c.handTag(c.SecondHand(t), "#f00"))
+	io.WriteString(w, c.handTag(c.MinuteHand(t), "#000"))
+	io.WriteString(w, c.handTag(c.HourHand(t), "#000"))
 	io.WriteString(w, svgEnd)
 }
 
-func handTag(p Point, color string) string {
-	return fmt.Sprintf(`<line x1="150" y1="150" x2="%.3f" y2="%.3f" style="fill:none;stroke:%s;stroke-width:3px;"/>`, p.X, p.Y, color)
+func (c *Clockface) handTag(p Point, color string) string {
+	return fmt.Sprintf(`<line x1="%.00f" y1="%.00f" x2="%.3f" y2="%.3f" style="fill:none;stroke:%s;stroke-width:3px;"/>`, c.origin, c.origin, p.X, p.Y, color)
+}
+
+func (c *Clockface) bezel(color string) string {
+	return fmt.Sprintf(`<circle cx="%.00f" cy="%.00f" r="%.00f" style="fill:#fff;stroke:%s;stroke-width:5px;"/>`, c.origin, c.origin, c.scale, color)
 }
 
 const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
@@ -51,7 +61,5 @@ const svgStart = `<?xml version="1.0" encoding="UTF-8" standalone="no"?>
      height="100%"
      viewBox="0 0 300 300"
      version="2.0">`
-
-const bezel = `<circle cx="150" cy="150" r="100" style="fill:#fff;stroke:#000;stroke-width:5px;"/>`
 
 const svgEnd = `</svg>`
