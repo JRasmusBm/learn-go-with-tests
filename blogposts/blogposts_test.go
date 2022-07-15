@@ -12,6 +12,7 @@ func TestNewBlogPosts(t *testing.T) {
 		fs := fstest.MapFS{
 			"hello world.md":  {Data: []byte("hi")},
 			"hello-world2.md": {Data: []byte("hola")},
+			"hello-world3.md": {Data: []byte("hola")},
 		}
 
 		got := len(blogposts.NewPostsFromFS(fs))
