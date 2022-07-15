@@ -23,6 +23,14 @@ func (s *StubFailingFS) Open(name string) (fs.File, error) {
 	return nil, givenError
 }
 
+func assertPostsEqual(t testing.TB, want, got []blogposts.Post) {
+	t.Helper()
+
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v posts, want %v posts", got, want)
+	}
+}
+
 func TestNewBlogPosts(t *testing.T) {
 	t.Run("Creates new blog posts", func(t *testing.T) {
 		fs := fstest.MapFS{
@@ -37,15 +45,12 @@ func TestNewBlogPosts(t *testing.T) {
 		}
 
 		want := []blogposts.Post{
-			blogposts.Post{Title: "Hi"},
-			blogposts.Post{Title: "Rewriting Git History"},
-			blogposts.Post{Title: "Hello"},
+			{Title: "Hi"},
+			{Title: "Rewriting Git History"},
+			{Title: "Hello"},
 		}
 
-		if !reflect.DeepEqual(got, want) {
-			t.Errorf("got %v posts, want %v posts", got, want)
-		}
-
+		assertPostsEqual(t, got, want)
 	})
 
 	t.Run("Propagates errors from fs.Open", func(t *testing.T) {
