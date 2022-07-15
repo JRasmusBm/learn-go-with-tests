@@ -44,7 +44,5 @@ func readPostFile(filesystem fs.FS, entry fs.DirEntry) (Post, error) {
 		return Post{}, err
 	}
 
-	title := string(rawContents)[7:]
-
-	return Post{Title: title}, nil
+	return Post{Title: string(rawContents)[7:]}, nil
 }
