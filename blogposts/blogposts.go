@@ -19,7 +19,7 @@ func NewPostsFromFS(filesystem fs.FS) ([]Post, error) {
 	var result []Post
 
 	for _, file := range dir {
-		post, err := readPostFile(filesystem, file)
+		post, err := readPost(filesystem, file)
 
 		if err != nil {
 			return nil, err
@@ -31,7 +31,7 @@ func NewPostsFromFS(filesystem fs.FS) ([]Post, error) {
 	return result, nil
 }
 
-func readPostFile(filesystem fs.FS, entry fs.DirEntry) (Post, error) {
+func readPost(filesystem fs.FS, entry fs.DirEntry) (Post, error) {
 	file, err := filesystem.Open(entry.Name())
 
 	if err != nil {
