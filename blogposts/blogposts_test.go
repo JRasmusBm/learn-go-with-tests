@@ -4,6 +4,7 @@ import (
 	"errors"
 	"io/fs"
 	"log"
+	"reflect"
 
 	blogposts "github.com/jrasmusbm/learn-go-with-tests/reading-files"
 
@@ -25,9 +26,9 @@ func (s *StubFailingFS) Open(name string) (fs.File, error) {
 func TestNewBlogPosts(t *testing.T) {
 	t.Run("Creates new blog posts", func(t *testing.T) {
 		fs := fstest.MapFS{
-			"hello world.md":  {Data: []byte("hi")},
-			"hello-world2.md": {Data: []byte("hola")},
-			"hello-world3.md": {Data: []byte("hola")},
+			"hello world.md":  {Data: []byte("Title: Hi")},
+			"hello-world2.md": {Data: []byte("Title: Rewriting Git History")},
+			"hello-world3.md": {Data: []byte("Title: Hello")},
 		}
 
 		got, err := blogposts.NewPostsFromFS(fs)
@@ -35,9 +36,13 @@ func TestNewBlogPosts(t *testing.T) {
 			t.Fatal(err)
 		}
 
-		want := len(fs)
+		want := []blogposts.Post{
+			blogposts.Post{Title: "Hi"},
+			blogposts.Post{Title: "Rewriting Git History"},
+			blogposts.Post{Title: "Hello"},
+		}
 
-		if len(got) != want {
+		if !reflect.DeepEqual(got, want) {
 			t.Errorf("got %v posts, want %v posts", got, want)
 		}
 
