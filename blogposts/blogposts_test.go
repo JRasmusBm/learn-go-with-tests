@@ -15,10 +15,14 @@ func TestNewBlogPosts(t *testing.T) {
 			"hello-world3.md": {Data: []byte("hola")},
 		}
 
-		got := len(blogposts.NewPostsFromFS(fs))
+		got, err := blogposts.NewPostsFromFS(fs)
+		if err != nil {
+			t.Fatal(err)
+		}
+
 		want := len(fs)
 
-		if got != want {
+		if len(got) != want {
 			t.Errorf("got %v posts, want %v posts", got, want)
 		}
 	})

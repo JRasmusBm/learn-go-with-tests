@@ -7,13 +7,14 @@ import (
 type Post struct {
 }
 
-func NewPostsFromFS(filesystem fs.FS) []Post {
+func NewPostsFromFS(filesystem fs.FS) ([]Post, error) {
 	dir, _ := fs.ReadDir(filesystem, ".")
+
 	var result []Post
 
 	for range dir {
 		result = append(result, Post{})
 	}
 
-	return result
+	return result, nil
 }
