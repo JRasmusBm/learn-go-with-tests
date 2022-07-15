@@ -1,10 +1,12 @@
 package blogposts
 
-import "testing/fstest"
+import (
+	"io/fs"
+)
 
 type Post struct {
 }
 
-func NewPostsFromFS(filesystem fstest.MapFS) []Post {
+func NewPostsFromFS(filesystem fs.FS) []Post {
 	return []Post{{}, {}}
 }
