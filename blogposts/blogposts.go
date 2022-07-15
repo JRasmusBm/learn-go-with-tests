@@ -18,8 +18,8 @@ func NewPostsFromFS(filesystem fs.FS) ([]Post, error) {
 
 	var result []Post
 
-	for _, file := range dir {
-		post, err := readPost(filesystem, file)
+	for _, entry := range dir {
+		post, err := readPost(filesystem, entry)
 
 		if err != nil {
 			return nil, err
